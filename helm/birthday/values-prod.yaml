@@ -1,0 +1,31 @@
+envVars:
+  - name: POSTGRES_DSN
+    value: "postgres://postgres:postgres@postgres:5432/birthday?sslmode=disable"
+
+image:
+  repository: imgs/birthday
+  pullPolicy: IfNotPresent
+  tag: "0.1.0"
+
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 50m
+    memory: 64Mi
+
+livenessProbe:
+  httpGet:
+    path: /livez
+    port: http
+readinessProbe:
+  httpGet:
+    path: /readyz
+    port: http
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80
